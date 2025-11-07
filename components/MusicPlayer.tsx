@@ -21,25 +21,32 @@ const SoundOffIcon: React.FC = () => (
 const MUSIC_URL = 'https://www.chosic.com/wp-content/uploads/2021/07/purrple-cat-equinox.mp3';
 
 const MusicPlayer: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Synchronize audio playback with the isPlaying state
+  // Attempt to play music automatically on mount.
   useEffect(() => {
-    if (isPlaying) {
-      // The play() method returns a Promise which can be rejected if the user hasn't interacted with the page yet.
-      audioRef.current?.play().catch(error => {
-        console.error("Audio playback failed:", error);
-        // If autoplay fails, we should reflect that in the UI state.
-        setIsPlaying(false);
-      });
-    } else {
-      audioRef.current?.pause();
-    }
-  }, [isPlaying]);
+    // The play() method returns a Promise which can be rejected if the user hasn't interacted with the page yet.
+    // We will attempt to play, but if it fails, it's a browser restriction we'll respect.
+    // A user click on the mute button will then serve as interaction to start playback.
+    audioRef.current?.play().catch(error => {
+      console.warn("Audio autoplay was prevented by the browser.");
+    });
+  }, []);
 
-  const togglePlay = () => {
-    setIsPlaying(prev => !prev);
+  // Sync the muted state with the audio element
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
+  const toggleMute = () => {
+    setIsMuted(prev => !prev);
+    // If the audio is paused (e.g., due to autoplay restrictions), this interaction should start it.
+    if (audioRef.current?.paused) {
+      audioRef.current?.play().catch(e => console.error("Could not play audio:", e));
+    }
   };
 
   return (
@@ -48,13 +55,13 @@ const MusicPlayer: React.FC = () => {
       <audio ref={audioRef} src={MUSIC_URL} loop preload="auto" />
       
       <motion.button
-        onClick={togglePlay}
-        aria-label={isPlaying ? 'Pause background music' : 'Play background music'}
+        onClick={toggleMute}
+        aria-label={isMuted ? 'Unmute background music' : 'Mute background music'}
         className="fixed bottom-4 right-4 z-30 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white focus:outline-none focus:ring-4 focus:ring-cyan-400 transition-all duration-300"
         whileHover={{ scale: 1.1, backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
         whileTap={{ scale: 0.9 }}
       >
-        {isPlaying ? <SoundOnIcon /> : <SoundOffIcon />}
+        {isMuted ? <SoundOffIcon /> : <SoundOnIcon />}
       </motion.button>
     </>
   );
