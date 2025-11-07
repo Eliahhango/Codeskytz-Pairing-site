@@ -1,17 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const CodeskyLogo: React.FC = () => (
-  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-200">
-    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M2 7L12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M12 22V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M22 7L12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M17 4.5L7 9.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-
 const headerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -45,7 +34,7 @@ const Header: React.FC = () => {
           className="flex items-center gap-3"
           variants={itemVariants}
         >
-          <CodeskyLogo />
+          <div className="w-12 h-12 bg-gray-700 rounded-full border-2 border-gray-500 flex-shrink-0"></div>
           <span className="font-bold text-lg hidden sm:block text-gray-200">Codesky Tz Bot</span>
         </motion.div>
       </motion.div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -48,6 +48,7 @@ const titleVariants = {
 
 const App: React.FC = () => {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -55,6 +56,24 @@ const App: React.FC = () => {
     }, 10000); // Change quote every 10 seconds
 
     return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, []);
+
+  useEffect(() => {
+    const handleFirstScroll = () => {
+      if (audioRef.current && audioRef.current.paused) {
+        audioRef.current.play().catch(error => {
+          console.warn("Audio playback on scroll was prevented by the browser:", error);
+        });
+      }
+      // Remove listener after first trigger
+      window.removeEventListener('scroll', handleFirstScroll);
+    };
+
+    window.addEventListener('scroll', handleFirstScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleFirstScroll);
+    };
   }, []);
 
   return (
@@ -68,7 +87,7 @@ const App: React.FC = () => {
             initial="hidden"
             animate="visible"
           >
-            Session Gen
+            CodeskyTz pairing site
           </motion.h1>
 
           <QuoteDisplay quote={quotes[currentQuoteIndex]} />
@@ -88,7 +107,7 @@ const App: React.FC = () => {
           </motion.div>
         </div>
       </main>
-      <MusicPlayer />
+      <MusicPlayer audioRef={audioRef} />
       <Footer />
     </div>
   );
