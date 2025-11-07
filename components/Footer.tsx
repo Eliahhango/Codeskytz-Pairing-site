@@ -22,7 +22,7 @@ const CheckIcon: React.FC = () => (
 
 const Footer: React.FC = () => {
     const [isCopied, setIsCopied] = useState(false);
-    const repoUrl = 'https://github.com/codeskytzmd';
+    const repoUrl = 'https://github.com/codeskytz/codeskytz-md';
 
     const handleCopyClick = () => {
         if (isCopied) return;
@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
               className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold py-2 px-4 rounded-full shadow-lg shadow-indigo-500/30 transition-shadow duration-300 ease-in-out hover:shadow-xl hover:shadow-indigo-500/50 focus:outline-none focus:ring-4 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-gray-950"
             >
               <GithubIcon />
-              <span className="hidden sm:inline">Git Repo (codeskytzmd)</span>
+              <span className="hidden sm:inline">Git Repo (codeskytz/codeskytz-md)</span>
               <span className="sm:hidden">GitHub</span>
             </motion.a>
             <motion.button
